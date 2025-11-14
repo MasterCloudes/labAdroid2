@@ -58,31 +58,38 @@ public class CatAdapter
        holder.img_edit.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               // code xử lý khi click vào nút sửa
-               updateRow(catDTO, position);
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    // code xử lý khi click vào nút sửa
+                    updateRow(list.get(adapterPosition), adapterPosition);
+                }
            }
        });
        holder.img_delete.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               //code xử lý khi click vào nút xoá
-               AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Xác nhận xóa");
-                builder.setMessage("Bạn có chắc chắn muốn xóa không?");
-                builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (catDAO.deleteRow(catDTO.getId())) {
-                            list.remove(catDTO);
-                            notifyDataSetChanged();
-                            Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    //code xử lý khi click vào nút xoá
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Xác nhận xóa");
+                    builder.setMessage("Bạn có chắc chắn muốn xóa không?");
+                    builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            CatDTO catToDelete = list.get(adapterPosition);
+                            if (catDAO.deleteRow(catToDelete.getId())) {
+                                list.remove(adapterPosition);
+                                notifyItemRemoved(adapterPosition);
+                                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-                builder.setNegativeButton("Hủy", null);
-                builder.show();
+                    });
+                    builder.setNegativeButton("Hủy", null);
+                    builder.show();
+                }
            }
        });
 
@@ -115,7 +122,7 @@ public class CatAdapter
                objCat.setName(ed_name.getText().toString()); // cap nhat lai ten cat
                if (catDAO.updateRow(objCat)) { // ghi vào csdl
                    list.set(index, objCat); // update danh sach tren recyclerview
-                   notifyDataSetChanged(); // thong bao cho adapter update giao dien
+                   notifyItemChanged(index); // thong bao cho adapter update giao dien
                    Toast.makeText(context, "Sửa thành công", Toast.LENGTH_SHORT).show();
                } else {
                    Toast.makeText(context, "Sửa thất bại", Toast.LENGTH_SHORT).show();
