@@ -35,12 +35,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //ánh xạ view
-       rc_cat = findViewById(R.id.rc_cat);
-       catDAO = new CatDAO(this);
-       
-       list = catDAO.getAllCat();
-       adapter = new CatAdapter(this, list);
-       rc_cat.setAdapter(adapter);
+        rc_cat = findViewById(R.id.rc_cat);
+        catDAO = new CatDAO(this);
+        CatDTO catDTO = new CatDTO();
 
+        // thêm dữ liệu nếu cần thêm
+//
+//        catDTO.setName("Máy tinh");
+//
+//        int kq = catDAO.addCat(catDTO);
+//        Log.d(TAG, "onCreate: "+kq);
+//
+//        if(kq >0 ){
+//            Log.d(TAG, "onCreate: Thành công");
+//        }else{
+//            Log.d(TAG, "onCreate: Thất bại");
+//        }
+
+        list = catDAO.getAllCat();
+        adapter = new CatAdapter(this, list);
+        rc_cat.setAdapter(adapter);
     }
 }
