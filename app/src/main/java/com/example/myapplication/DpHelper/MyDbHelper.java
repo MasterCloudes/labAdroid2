@@ -1,6 +1,7 @@
 package com.example.myapplication.DpHelper;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,6 +24,16 @@ public class MyDbHelper extends SQLiteOpenHelper {
        String sqlCat = "CREATE TABLE tb_cat (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);";
        db.execSQL(sqlCat);
 
+       ContentValues values = new ContentValues();
+       values.put("name", "Điện thoại");
+       db.insert("tb_cat", null, values);
+
+        values.put("name", "Máy tính");
+        db.insert("tb_cat", null, values);
+
+        values.put("name", "Đồng hồ");
+        db.insert("tb_cat", null, values);
+
 
        String sqlProduct = "CREATE TABLE tb_product (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, price NUMBER NOT NULL DEFAULT 0, id_cat integer, CONSTRAINT fk_category FOREIGN KEY (id_cat) REFERENCES tb_cat (id))";
        db.execSQL(sqlProduct);
@@ -35,6 +46,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
        if(oldVersion< newVersion){
            db.execSQL("DROP TABLE IF EXISTS tb_cat");
            db.execSQL("DROP TABLE IF EXISTS tb_product");
+           onCreate(db);
        }
    }
 }

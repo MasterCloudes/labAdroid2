@@ -1,59 +1,28 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.myapplication.Adapter.CatAdapter;
-import com.example.myapplication.DAO.CatDAO;
-import com.example.myapplication.DTO.CatDTO;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    CatDAO catDAO;
-    static String TAG = "zzzzzzzzzzzzzz";
-    RecyclerView rc_cat;
-    ArrayList<CatDTO> list;
-    CatAdapter adapter;
+
+    private Button btnManageCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        btnManageCategories = findViewById(R.id.btn_manage_categories);
+
+        btnManageCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CategoryActivity.class));
+            }
         });
-
-        //ánh xạ view
-        rc_cat = findViewById(R.id.rc_cat);
-        catDAO = new CatDAO(this);
-        CatDTO catDTO = new CatDTO();
-
-        // thêm dữ liệu nếu cần thêm
-//
-//        catDTO.setName("Máy tinh");
-//
-//        int kq = catDAO.addCat(catDTO);
-//        Log.d(TAG, "onCreate: "+kq);
-//
-//        if(kq >0 ){
-//            Log.d(TAG, "onCreate: Thành công");
-//        }else{
-//            Log.d(TAG, "onCreate: Thất bại");
-//        }
-
-        list = catDAO.getAllCat();
-        adapter = new CatAdapter(this, list);
-        rc_cat.setAdapter(adapter);
     }
 }
